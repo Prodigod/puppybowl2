@@ -1,3 +1,5 @@
+import { useGetPuppiesQuery } from "../puppies/puppySlice.js"
+
 /**
  * @component
  * Shows a list of puppies in the roster.
@@ -5,25 +7,29 @@
  */
 export default function PuppyList({ setSelectedPuppyId }) {
   // TODO: Get data from getPuppies query
+  const {data: puppies, isLoading, error} = useGetPuppiesQuery();
 
   return (
     <article>
       <h2>Roster</h2>
       <ul className="puppies">
         {isLoading && <li>Loading puppies...</li>}
-        {puppies.map((p) => (
-          <li key={p.id}>
-            <h3>
-              {p.name} #{p.id}
-            </h3>
-            <figure>
-              <img src={p.imageUrl} alt={p.name} />
-            </figure>
-            <button onClick={() => setSelectedPuppyId(p.id)}>
-              See details
-            </button>
-          </li>
-        ))}
+        {error && <li>Error: {error.message}</li>}
+        {puppies ? (
+          puppies.map((p) => (
+            <li key={p.id}>
+              <h3>
+                {p.name} #{p.id}
+              </h3>
+              <figure>
+                <img src={p.imageUrl} alt={p.name} />
+              </figure>
+              <button onClick={() => setSelectedPuppyId(p.id)}>See details</button>
+            </li>
+          ))
+        ) : (
+          <li>No puppies found</li> 
+        )}
       </ul>
     </article>
   );

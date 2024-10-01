@@ -1,3 +1,6 @@
+import { useGetPuppiesQuery } from "../puppies/puppySlice.js"
+import { useDeletePuppyMutation } from "../puppies/puppySlice.js";
+
 /**
  * @component
  * Shows comprehensive information about the selected puppy, if there is one.
@@ -5,11 +8,14 @@
  */
 export default function PuppyDetails({ selectedPuppyId, setSelectedPuppyId }) {
   // TODO: Grab data from the `getPuppy` query
-
+  const { data: puppy, isLoading, error } = useGetPuppiesQuery(selectedPuppyId);
   // TODO: Use the `deletePuppy` mutation to remove a puppy when the button is clicked
-
+  const [deletePuppy] = useDeletePuppyMutation();
+  
+  
   function removePuppy(id) {
     setSelectedPuppyId();
+    deletePuppy(id);
   }
 
   // There are 3 possibilities:
